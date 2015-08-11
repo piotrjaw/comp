@@ -1,0 +1,107 @@
+extends layout
+
+block content
+  md-content(md-theme='alt',layout='row')
+    md-item(flex='0',flex-gt-md='10')
+    md-content(md-theme='default',layout='column',flex='100',flex-gt-md='80').md-whiteframe-z2
+      md-toolbar(layout-padding)
+        form(name='loginForm',layout='row')
+          md-item(flex='20',flex-gt-md='60')
+          md-input-container(flex).md-accent
+            label login
+            input(type='text')
+          md-input-container(flex).md-accent
+            label hasło
+            input(type='password')
+          md-button(flex).md-primary.md-hue-1 Zaloguj
+      form(name='entryForm',ng-controller='submitController',layout='column',layout-padding,ng-validate)#entryForm
+        md-subheader.md-accent TWOJE DANE
+        md-item(layout,layout-sm='column',layout-padding)
+          md-input-container(flex)
+            label Imię
+            input(type='text',ng-model='entryData.firstName',required,name='firstName')
+            md-item(ng-messages='entryForm.firstName.$error')
+              md-item(ng-message='required') Pole wymagane
+          md-input-container(flex)
+            label Nazwisko
+            input(type='text',ng-model='entryData.lastName',required,name='lastName')
+            md-item(ng-messages='entryForm.lastName.$error')
+              md-item(ng-message='required') Pole wymagane
+          md-input-container(flex)
+            label Email
+            input(type='email',ng-model='entryData.email',required,name='email')
+            md-item(ng-messages='entryForm.email.$error')
+              md-item(ng-message='required') Pole wymagane
+              md-item(ng-message='email',ng-if='entryForm.email.$dirty') Niepoprawny email
+        md-subheader.md-accent DANE PH
+        md-item(layout,layout-sm='column',layout-padding)
+          md-input-container(flex)
+            label Imię
+            input(type='text',ng-model='entryData.repFirstName',required,name='repFirstName')
+            md-item(ng-messages='entryForm.repFirstName.$error')
+              md-item(ng-message='required') Pole wymagane
+          md-input-container(flex)
+            label Nazwisko
+            input(type='text',ng-model='entryData.repLastName',required,name='repLastName')
+            md-item(ng-messages='entryForm.repLastName.$error')
+              md-item(ng-message='required') Pole wymagane
+          md-input-container(flex)
+            label Email
+            input(type='email',ng-model='entryData.repEmail',required,name='repEmail')
+            md-item(ng-messages='entryForm.repEmail.$error')
+              md-item(ng-message='required') Pole wymagane
+              md-item(ng-message='email',ng-if='entryForm.repEmail.$dirty') Niepoprawny email
+        md-subheader.md-accent DANE SKLEPU
+        md-item(layout,layout-sm='column',layout-padding)
+          md-input-container(flex)
+            label Nazwa
+            input(type='text',ng-model='entryData.storeName',required,name='storeName')
+            md-item(ng-messages='entryForm.storeName.$error')
+              md-item(ng-message='required') Pole wymagane
+          md-input-container(flex)
+            label Miasto
+            input(type='text',ng-model='entryData.storeCity',required,name='storeCity')
+            md-item(ng-messages='entryForm.storeCity.$error')
+              md-item(ng-message='required') Pole wymagane
+          md-input-container(flex)
+            label Ulica
+            input(type='text',ng-model='entryData.storeStreet',required,name='storeStreet')
+            md-item(ng-messages='entryForm.storeStreet.$error')
+              md-item(ng-message='required') Pole wymagane
+        md-subheader.md-accent OPIS EKSPOZYCJI
+        md-item(layout,layout-sm='column',layout-padding)
+          md-input-container(flex)
+            label Opis
+            textarea(ng-model='entryData.extraExpositionDescription',required,name='extraExpositionDescription')
+            md-item(ng-messages='entryForm.extraExpositionDescription.$error')
+              md-item(ng-message='required') Pole wymagane
+          md-input-container(flex)
+            md-select(ng-model='entryData.extraExpositionPeriod',required,placeholder='Czas trwania',name='extraExpositionPeriod')
+              md-option(value='Tydzień') Tydzień
+              md-option(value='Weekend') Weekend
+            md-item(ng-messages='entryForm.extraExpositionPeriod.$error')
+              md-item(ng-message='required') Pole wymagane
+          md-input-container(flex)
+            md-select(ng-model='entryData.extraExpositionType',required,placeholder='Typ',name='extraExpositionType')
+              md-option(value='Lodówka') Lodówka
+              md-option(value='Stand') Stand
+              md-option(value='Paleta') Paleta
+              md-option(value='Półka') Półka
+              md-option(value='Komin') Komin
+            md-item(ng-messages='entryForm.extraExpositionType.$error')
+              md-item(ng-message='required') Pole wymagane
+        md-item(layout,layout-sm='column',layout-padding)
+          md-input-container(flex)
+            label Liczba
+            input(type='number',ng-model='entryData.extraExpositionNumber',required,name='extraExpositionNumber')
+            md-item(ng-messages='entryForm.extraExpositionNumber.$error')
+              md-item(ng-message='required') Pole wymagane
+              md-item(ng-message='number',ng-if='entryForm.extraExpositionNumber.$dirty') Niepoprawna liczba
+          md-button(flex,name='photos',required,ngf-select,ngf-multiple='true',ng-model='photos',ngf-accept='"image/*"').md-raised Zdjęcia dodatkowej ekspozycji
+            span(ng-if='photos.length > 0')  ({{photos.length > 2 ? 2 : photos.length}})
+          md-item(flex)
+        md-item(layout,layout-sm='column',layout-padding)
+          no-captcha(g-recaptcha-respone='gRecaptchaResponse',theme='light',site-key='6LfvFwsTAAAAAN7x5MLZXF3FAlU6VgZyzcOj1S-l')
+          md-button(flex,ng-if='gRecaptchaResponse&&!entryForm.$invalid',ng-click='submitEntry()').md-raised.md-primary.animate Wyślij
+          md-item(flex) {{entryForm.$invalid}}, {{gRecaptchaResponse}}
+    md-item(flex='0',flex-gt-md='10')
